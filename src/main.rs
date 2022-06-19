@@ -5,7 +5,7 @@ use crossterm::{
 };
 use image::{imageops::resize, DynamicImage, ImageBuffer, ImageError, Rgba};
 use std::io::{stdout, Write};
-static VERSION: &'static str = "0.2 BETA";
+static VERSION: &'static str = "1.0";
 
 fn help() {
     println!(
