@@ -1,6 +1,10 @@
-use std::io::{stdout, Write};
-use crossterm::{style::{SetBackgroundColor, ResetColor}, style::{Color, Print}, queue};
+use crossterm::{
+    queue,
+    style::{Color, Print},
+    style::{ResetColor, SetBackgroundColor},
+};
 use image::{imageops::resize, DynamicImage, ImageBuffer, ImageError, Rgba};
+use std::io::{stdout, Write};
 static VERSION: &'static str = "0.2 BETA";
 
 fn help() {
@@ -52,8 +56,18 @@ fn real_main(image_file: &str) {
     let rgb_image = DynamicImage::ImageRgba8(resized_image).to_rgb8(); // Convert the image to RGB so we dont have any transparency issues
     let mut stdout = stdout();
 
-    for pixel in rgb_image.pixels() { // Iterate over pixels and gather their RGB values
-        match queue!(stdout, SetBackgroundColor(Color::Rgb { r: pixel[0], g: pixel[1], b: pixel[2] }), Print(" "), ResetColor) {
+    for pixel in rgb_image.pixels() {
+        // Iterate over pixels and gather their RGB values
+        match queue!(
+            stdout,
+            SetBackgroundColor(Color::Rgb {
+                r: pixel[0],
+                g: pixel[1],
+                b: pixel[2]
+            }),
+            Print(" "),
+            ResetColor
+        ) {
             // Print the pixel to the terminal
             Ok(_) => (),
             Err(error) => {
@@ -62,8 +76,9 @@ fn real_main(image_file: &str) {
             }
         };
     }
-    
-    match stdout.flush() { // Print everything in the queue to the terminal
+
+    match stdout.flush() {
+        // Print everything in the queue to the terminal
         Ok(_) => (),
         Err(error) => {
             println!("Could not flush terminal, error: {}", error);
